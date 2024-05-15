@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Service
 public class JwtUtils {
-    private static final String SECRET = "ougabougadouga";
+    private static final String SECRET = "===========================ougabougadouga============================================";
     private static final long EXPIRATION_TIME = 60L;
 
     private Key getSigningKey() {
