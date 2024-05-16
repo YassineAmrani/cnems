@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
-
-    @Autowired
-    private PasswordUtils passwordUtils;
-
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    PasswordUtils passwordUtils;
 
     public String signIn(String username, String password) throws Exception {
         User user = userRepository.findByUsername(username);
