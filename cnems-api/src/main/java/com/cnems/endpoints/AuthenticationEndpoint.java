@@ -4,7 +4,9 @@ import com.cnems.dto.SuccessMessage;
 import com.cnems.enums.ExceptionStatusMessage;
 import com.cnems.services.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.annotation.web.oauth2.client.OAuth2ClientSecurityMarker;
 import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,7 @@ public class AuthenticationEndpoint {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<SuccessMessage> register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password) {
+    public ResponseEntity<SuccessMessage> register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestHeader String token) {
         try {
             if((username == null || username.isEmpty() ) || (password == null || password.isEmpty()))
                 return ResponseEntity.badRequest()
