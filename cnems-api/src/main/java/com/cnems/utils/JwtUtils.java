@@ -14,7 +14,7 @@ import java.security.Key;
 import java.security.PublicKey;
 import java.util.Date;
 
-@Service
+@Component
 public class JwtUtils {
     private static final String SECRET = "===========================ougabougadouga============================================";
     private static final long EXPIRATION_TIME = 60L;
@@ -43,7 +43,7 @@ public class JwtUtils {
     public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME*1000))
                 .signWith(this.getSigningKey())
                 .compact();
     }
