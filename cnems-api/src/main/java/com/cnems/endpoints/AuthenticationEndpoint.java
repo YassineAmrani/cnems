@@ -42,13 +42,13 @@ public class AuthenticationEndpoint {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<SuccessMessage> register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestHeader String token) {
+    public ResponseEntity<SuccessMessage> register(@RequestParam(name = "username") String username, @RequestParam(name = "password") String password, @RequestParam(name = "email") String email) {
         try {
             if((username == null || username.isEmpty() ) || (password == null || password.isEmpty()))
                 return ResponseEntity.badRequest()
                         .body(new SuccessMessage(false, "Username and password are required."));
 
-            String jwt = authenticationService.signUp(username, password);
+            String jwt = authenticationService.signUp(username, password, email);
             return ResponseEntity.ok().header("token", jwt).body(new SuccessMessage(true, "User registered successfully."));
         } catch(Exception e) {
 

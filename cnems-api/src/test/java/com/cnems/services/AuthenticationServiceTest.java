@@ -85,7 +85,7 @@ public class AuthenticationServiceTest {
         when(userRepository.save(any())).thenReturn(null);
         when(jwtUtils.generateToken("test")).thenReturn("this is a jwt token my boy!");
 
-        Assertions.assertDoesNotThrow(() -> authenticationService.signUp("test", "test"));
+        Assertions.assertDoesNotThrow(() -> authenticationService.signUp("test", "test", "test@test.com"));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByUsername("test")).thenReturn(user);
 
-        Assertions.assertThrows(Exception.class,() -> authenticationService.signIn("test", "test"));
+        Assertions.assertThrows(Exception.class,() -> authenticationService.signUp("test", "test", "test@test.com"));
     }
 
     @Test
@@ -105,6 +105,6 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByUsername("test")).thenReturn(user);
 
-        Assertions.assertThrows(Exception.class,() -> authenticationService.signIn("test", ""));
+        Assertions.assertThrows(Exception.class,() -> authenticationService.signUp( "test", "", ""));
     }
 }

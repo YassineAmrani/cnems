@@ -9,6 +9,8 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class AuthenticationService {
     @Autowired
@@ -32,12 +34,12 @@ public class AuthenticationService {
         return jwtUtils.generateToken(username);
     }
 
-    public String signUp(String username, String password) throws Exception {
+    public String signUp(String username, String password, String email) throws Exception {
         User checkUser = userRepository.findByUsername(username);
 
         if(checkUser != null) throw new Exception(ExceptionStatusMessage.ALREADY_EXISTS.toString());
 
-        User user = new User(username, passwordUtils.encryptPassword(password));
+        User user = new User(username, passwordUtils.encryptPassword(password), email, "USER", new Date());
         userRepository.save(user);
 
         return jwtUtils.generateToken(username);
