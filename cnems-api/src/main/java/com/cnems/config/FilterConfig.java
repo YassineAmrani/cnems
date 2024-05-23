@@ -1,7 +1,6 @@
 package com.cnems.config;
 
 import com.cnems.filter.JwtTokenFilter;
-import com.cnems.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -14,13 +13,14 @@ public class FilterConfig {
     JwtTokenFilter jwtTokenFilter;
 
     @Bean
-    public FilterRegistrationBean<JwtTokenFilter> jwtfilter() {
+    public FilterRegistrationBean<JwtTokenFilter> jwtfilterforUser() {
         FilterRegistrationBean<JwtTokenFilter> registrationBean = new FilterRegistrationBean<>();
 
         registrationBean.setFilter(jwtTokenFilter);
 
         registrationBean.addUrlPatterns("/api/*");
-        registrationBean.setOrder(1);
+        registrationBean.setOrder(2);
         return registrationBean;
     }
 }
+

@@ -25,23 +25,23 @@ public class User {
     private String role;
 
     @Column(name = "created_at")
-    private Date created_at;
+    private Date createdAt;
 
-    public User(long id, String username, String password, String email, String role, Date created_at) {
+    public User(long id, String username, String password, String email, String role, Date createdAt) {
         setId(id);
         setUsername(username);
         setPassword(password);
         setEmail(email);
         setRole(role);
-        setCreated_at(created_at);
+        setCreatedAt(createdAt);
     }
 
-    public User(String username, String password, String email, String role, Date created_at) {
+    public User(String username, String password, String email, String role, Date createdAt) {
         setUsername(username);
         setPassword(password);
         setEmail(email);
         setRole(role);
-        setCreated_at(created_at);
+        setCreatedAt(createdAt);
     }
 
     public User() {
@@ -87,11 +87,11 @@ public class User {
         this.role = role;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

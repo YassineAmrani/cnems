@@ -1,6 +1,7 @@
 package com.cnems.filter;
 
 import com.cnems.entities.User;
+import com.cnems.enums.Roles;
 import com.cnems.repositories.UserRepository;
 import com.cnems.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
@@ -37,8 +38,10 @@ public class JwtTokenFilter implements Filter {
                 Claims decodedToken = jwtUtils.decodeToken(token.split(" ")[1]);
                 User user = userRepository.findByUsername(decodedToken.getSubject());
 
-                if(user == null) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                if(user == null) response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                else {
+                    if(request.getRequestURI().contains("/admin") && !user.getRole().contains(Roles.ADMIN.toString()))
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 }
             }
 
