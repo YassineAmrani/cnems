@@ -2,6 +2,8 @@ package com.cnems.services;
 
 import com.cnems.entities.User;
 import com.cnems.enums.ExceptionStatusMessage;
+import com.cnems.enums.Roles;
+import com.cnems.exceptions.CnemsException;
 import com.cnems.repositories.UserRepository;
 import com.cnems.utils.JwtUtils;
 import com.cnems.utils.PasswordUtils;
@@ -22,24 +24,24 @@ public class AuthenticationService {
     @Autowired
     PasswordUtils passwordUtils;
 
-    public String signIn(String username, String password) throws Exception {
+    public String signIn(String username, String password) throws CnemsException {
         User user = userRepository.findByUsername(username);
 
-        if(user == null) throw new Exception("NOT_FOUND");
+        if(user == null) throw new CnemsException(404 ,"Not Found");
 
         if(!passwordUtils.compare(password, user.getPassword())) {
-            throw new Exception("Incorrect Password");
+            throw new CnemsException(400 ,"Incorrect Password");
         }
 
         return jwtUtils.generateToken(username);
     }
 
-    public String signUp(String username, String password, String email) throws Exception {
+    public String signUp(String username, String password, String email) throws CnemsException {
         User checkUser = userRepository.findByUsername(username);
 
-        if(checkUser != null) throw new Exception(ExceptionStatusMessage.ALREADY_EXISTS.toString());
+        if(checkUser != null) throw new CnemsException(400, "User Already Exists");
 
-        User user = new User(username, passwordUtils.encryptPassword(password), email, "USER", new Date());
+        User user = new User(username, passwordUtils.encryptPassword(password), email, Roles.USER.toString(), new Date());
         userRepository.save(user);
 
         return jwtUtils.generateToken(username);
