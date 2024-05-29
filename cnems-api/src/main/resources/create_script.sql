@@ -24,10 +24,10 @@ ALTER TABLE IF EXISTS public.users
 
 CREATE TABLE IF NOT EXISTS public.expense_categories
 (
-    id bigint NOT NULL,
-    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
-    description character varying COLLATE pg_catalog."default",
-    CONSTRAINT expense_categories_pkey PRIMARY KEY (id)
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+        description character varying COLLATE pg_catalog."default",
+        CONSTRAINT expense_categories_pkey PRIMARY KEY (id)
 )
 
 TABLESPACE pg_default;
