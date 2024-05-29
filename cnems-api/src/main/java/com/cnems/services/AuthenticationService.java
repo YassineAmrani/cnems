@@ -16,13 +16,13 @@ import java.util.Date;
 @Service
 public class AuthenticationService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     @Autowired
-    PasswordUtils passwordUtils;
+    private PasswordUtils passwordUtils;
 
     public String signIn(String username, String password) throws CnemsException {
         User user = userRepository.findByUsername(username);
