@@ -40,7 +40,7 @@ public class ExpenseCategoryEndpoint {
     }
 
     @PostMapping("/")
-    ResponseEntity<SuccessMessage> addCategory(@RequestParam("name") String name, String description) {
+    ResponseEntity<SuccessMessage> addCategory(@RequestParam("name") String name, @RequestParam("description") String description) {
         try {
             expenseCategoryService.addCategory(name, description);
             return ResponseEntity.noContent().build();
@@ -50,7 +50,7 @@ public class ExpenseCategoryEndpoint {
     }
 
     @PutMapping("/")
-    ResponseEntity<SuccessMessage> updateCategory(@RequestParam("id") Long id, @RequestParam("name") String name, String description) {
+    ResponseEntity<SuccessMessage> updateCategory(@RequestParam("id") Long id, @RequestParam("name") String name, @RequestParam("description") String description) {
         try {
             expenseCategoryService.updateCategory(id, name, description);
             return ResponseEntity.ok(new SuccessMessage(true, "Updated Category Successfully"));

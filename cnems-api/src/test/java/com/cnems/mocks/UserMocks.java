@@ -13,7 +13,7 @@ import java.util.Date;
 public class UserMocks {
 
 
-    public User getMockedUser() {
+    public static User getMockedUser() {
         return new User(0, "test", "test","test@test.com", "USER", new Date());
     }
 }
