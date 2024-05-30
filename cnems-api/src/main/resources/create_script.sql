@@ -42,22 +42,22 @@ ALTER TABLE IF EXISTS public.expense_categories
 
 CREATE TABLE IF NOT EXISTS public.expenses
 (
-    id bigint NOT NULL,
-    user_id bigint NOT NULL,
-    category_id bigint NOT NULL,
-    amount integer NOT NULL,
-    date date NOT NULL,
-    description character varying(300) COLLATE pg_catalog."default",
-    created_at date NOT NULL,
-    CONSTRAINT expenses_pkey PRIMARY KEY (id),
-    CONSTRAINT category_id FOREIGN KEY (category_id)
-        REFERENCES public.expense_categories (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION,
-    CONSTRAINT user_id FOREIGN KEY (user_id)
-        REFERENCES public.users (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        user_id bigint NOT NULL,
+        category_id bigint NOT NULL,
+        amount integer NOT NULL,
+        date date NOT NULL,
+        description character varying(300) COLLATE pg_catalog."default",
+        created_at date NOT NULL,
+        CONSTRAINT expenses_pkey PRIMARY KEY (id),
+        CONSTRAINT category_id FOREIGN KEY (category_id)
+            REFERENCES public.expense_categories (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION,
+        CONSTRAINT user_id FOREIGN KEY (user_id)
+            REFERENCES public.users (id) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
 )
 
 TABLESPACE pg_default;

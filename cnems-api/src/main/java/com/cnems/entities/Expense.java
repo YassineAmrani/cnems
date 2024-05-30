@@ -19,7 +19,7 @@ public class Expense {
     Long categoryId;
 
     @Column(name = "amount")
-    int amount;
+    float amount;
 
     @Column(name = "date")
     Date date;
@@ -30,7 +30,7 @@ public class Expense {
     @Column(name = "created_at")
     Date createdAt;
 
-    public Expense(Long id, Long userId, Long categoryId, int amount, Date date, String description, Date createdAt) {
+    public Expense(Long id, Long userId, Long categoryId, float amount, Date date, String description, Date createdAt) {
         setId(id);
         setUserId(userId);
         setCategoryId(categoryId);
@@ -40,7 +40,7 @@ public class Expense {
         setCreatedAt(createdAt);
     }
 
-    public Expense(Long userId, Long categoryId, int amount, Date date, String description, Date createdAt) {
+    public Expense(Long userId, Long categoryId, float amount, Date date, String description, Date createdAt) {
         setUserId(userId);
         setCategoryId(categoryId);
         setAmount(amount);
@@ -75,11 +75,11 @@ public class Expense {
         this.categoryId = categoryId;
     }
 
-    public int getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 

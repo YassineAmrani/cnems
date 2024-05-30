@@ -43,12 +43,9 @@ public class AuthenticationServiceTest {
     @Test
     @DisplayName("Login: Successful")
     public void testSuccessfulLogin(){
-        User user = userMocks.getMockedUser();
-
-
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        when(userRepository.findByUsername(any())).thenReturn(UserMocks.getMockedUser());
         when(passwordUtils.compare("test", "test")).thenReturn(true);
-        when(jwtUtils.generateToken(user.getUsername())).thenReturn("this is a jwt token my boy!");
+        when(jwtUtils.generateToken(any())).thenReturn("this is a jwt token my boy!");
 
         Assertions.assertDoesNotThrow(() -> authenticationService.signIn("test", "test"));
     }
@@ -56,10 +53,8 @@ public class AuthenticationServiceTest {
     @Test
     @DisplayName("Login: Wrong Password")
     public void testWrongPasswordLogin(){
-        User user = userMocks.getMockedUser();
-        String jwt = "this is a jwt token my boy!";
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(user);
+        when(userRepository.findByUsername(any())).thenReturn(UserMocks.getMockedUser());
         when(passwordUtils.compare("test", "test")).thenReturn(false);
 
         Assertions.assertThrows(Exception.class,() -> authenticationService.signIn("test", "test"));
@@ -68,10 +63,8 @@ public class AuthenticationServiceTest {
     @Test
     @DisplayName("Login: Not Found")
     public void testNotFoundLogin(){
-        User user = userMocks.getMockedUser();
-        String jwt = "this is a jwt token my boy!";
 
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(null);
+        when(userRepository.findByUsername(any())).thenReturn(null);
 
         Assertions.assertThrows(Exception.class,() -> authenticationService.signIn("test", "test"));
     }
@@ -91,9 +84,8 @@ public class AuthenticationServiceTest {
     @Test
     @DisplayName("Registration: Already Exists")
     public void testAlredyExistsRegistration(){
-        User user = userMocks.getMockedUser();
 
-        when(userRepository.findByUsername("test")).thenReturn(user);
+        when(userRepository.findByUsername("test")).thenReturn(UserMocks.getMockedUser());
 
         Assertions.assertThrows(Exception.class,() -> authenticationService.signUp("test", "test", "test@test.com"));
     }
@@ -101,9 +93,8 @@ public class AuthenticationServiceTest {
     @Test
     @DisplayName("Registration: Missing Username or password")
     public void testMissingUsernameOrPasswordRegistration(){
-        User user = userMocks.getMockedUser();
 
-        when(userRepository.findByUsername("test")).thenReturn(user);
+        when(userRepository.findByUsername("test")).thenReturn(UserMocks.getMockedUser());
 
         Assertions.assertThrows(Exception.class,() -> authenticationService.signUp( "test", "", ""));
     }
