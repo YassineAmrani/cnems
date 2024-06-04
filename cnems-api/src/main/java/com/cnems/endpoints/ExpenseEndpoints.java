@@ -1,6 +1,5 @@
 package com.cnems.endpoints;
 
-import com.cnems.dto.ExpenseResponse;
 import com.cnems.dto.SuccessMessage;
 import com.cnems.entities.Expense;
 import com.cnems.exceptions.CnemsException;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -19,9 +19,18 @@ public class ExpenseEndpoints {
     ExpenseService expenseService;
 
     @GetMapping("/{id}")
-    ResponseEntity<ExpenseResponse> getExpense(@PathVariable("id") Long id) {
+    ResponseEntity<Expense> getExpense(@PathVariable("id") Long id) {
         try {
             return ResponseEntity.ok(expenseService.getExpense(id));
+        } catch(CnemsException e) {
+            return ResponseEntity.status(e.getStatus()).build();
+        }
+    }
+
+    @GetMapping("/category/{categoryId}/{page}")
+    ResponseEntity<List<Expense>> getExpensesByCategory(@PathVariable("categoryId") Long categoryId, @PathVariable("page") int page) {
+        try {
+            return ResponseEntity.ok(expenseService.getByCategory(categoryId, page));
         } catch(CnemsException e) {
             return ResponseEntity.status(e.getStatus()).build();
         }
