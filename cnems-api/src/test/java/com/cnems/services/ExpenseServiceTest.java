@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.Optional;
@@ -59,12 +60,21 @@ public class ExpenseServiceTest {
     }
 
     @Test
-    @DisplayName("Test Get Expense Category Not Found")
-    public void testGetExpenseCategoryNotFound() {
-        when(expenseRepository.findById(any())).thenReturn(Optional.of(ExpenseMock.getExpenseMock()));
-        when(expenseCategoryRepository.findById(any())).thenReturn(Optional.empty());
+    @DisplayName("Test Get Expense By Category")
+    public void testGetExpenseByCategory() {
+        when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
+        when(expenseRepository.findByCategoryId(any(), any())).thenReturn(Page.empty());
 
-        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.getExpense(0L));
+        assertDoesNotThrow(() -> expenseService.getByCategory(0L, 0));
+    }
+
+    @Test
+    @DisplayName("Test Get Expense By Category Not Found")
+    public void testGetExpenseByCategoryNotFound() {
+        when(expenseCategoryRepository.findById(any())).thenReturn(Optional.empty());
+        when(expenseRepository.findByCategoryId(any())).thenReturn(ExpenseMock.getExpenseListMock());
+
+        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.getByCategory(0L, 0));
         assertEquals(cnemsException.getStatus(), 404);
     }
 

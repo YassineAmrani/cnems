@@ -1,16 +1,19 @@
 package com.cnems.services;
 
-import com.cnems.dto.ExpenseResponse;
 import com.cnems.entities.Expense;
 import com.cnems.entities.ExpenseCategory;
+import com.cnems.entities.User;
 import com.cnems.exceptions.CnemsException;
 import com.cnems.repositories.ExpenseCategoryRepository;
 import com.cnems.repositories.ExpenseRepository;
 import com.cnems.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,24 +28,37 @@ public class ExpenseService {
     @Autowired
     ExpenseCategoryRepository expenseCategoryRepository;
 
-    public ExpenseResponse getExpense(Long id) throws CnemsException {
+    public Expense getExpense(Long id) throws CnemsException {
         Optional<Expense> expense = expenseRepository.findById(id);
 
         if(expense.isEmpty()) throw new CnemsException(404, "Expense not found");
 
-        Optional<ExpenseCategory> expenseCategory = expenseCategoryRepository.findById(expense.get().getCategoryId());
+        return expense.get();
+    }
 
-        if(expenseCategory.isEmpty()) throw new CnemsException(404, "Expense Category not found");
+    public List<Expense> getByCategory(Long categoryId, int page) throws CnemsException {
+        Optional<ExpenseCategory> category = expenseCategoryRepository.findById(categoryId);
 
-        return new ExpenseResponse(expense.get(), expenseCategory.get());
+        if(category.isEmpty()) throw new CnemsException(404, "Expense Category not found");
+
+        Pageable pageable = PageRequest.of(page, 5);
+
+        return expenseRepository.findByCategoryId(categoryId, pageable).toList();
     }
 
     public void addExpense(Long userId, Long categoryId, float amount, Date date, String description) throws CnemsException {
 
         if(amount == 0) throw new CnemsException(400, "Amount can't be zero");
         if(date.after(new Date())) throw new CnemsException(400, "Date can't be in the future");
-        if(userRepository.findById(userId).isEmpty()) throw new CnemsException(404, "User not found, please contact support");
-        if(expenseCategoryRepository.findById(categoryId).isEmpty()) throw new CnemsException(404, "Category not found, please create it first");
+
+        Optional<User> user = userRepository.findById(userId);
+
+        Optional<ExpenseCategory> category = expenseCategoryRepository.findById(categoryId);
+
+        if(user.isEmpty()) throw new CnemsException(404, "User not found, please contact support");
+        if(category.isEmpty()) throw new CnemsException(404, "Category not found, please create it first");
+
+
 
         Expense expense = new Expense(userId, categoryId, amount, date, description, new Date());
 
@@ -53,7 +69,9 @@ public class ExpenseService {
 
         if(amount == 0) throw new CnemsException(400, "Amount can't be zero");
         if(date.after(new Date())) throw new CnemsException(400, "Date can't be in the future");
-        if(expenseCategoryRepository.findById(categoryId).isEmpty()) throw new CnemsException(404, "Category not found, please create it first");
+
+        Optional<ExpenseCategory> category = expenseCategoryRepository.findById(categoryId);
+        if(category.isEmpty()) throw new CnemsException(404, "Category not found, please create it first");
 
         Optional<Expense> optionalExpense = expenseRepository.findById(id);
 
