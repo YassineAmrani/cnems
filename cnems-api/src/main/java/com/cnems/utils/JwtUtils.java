@@ -17,7 +17,7 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     private static final String SECRET = "===========================ougabougadouga============================================";
-    private static final long EXPIRATION_TIME = 60L;
+    private static final long EXPIRATION_TIME = 3600L;
 
     private final SecretKey secretKey = new SecretKey() {
         @Override

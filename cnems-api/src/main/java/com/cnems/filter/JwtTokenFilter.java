@@ -42,6 +42,7 @@ public class JwtTokenFilter implements Filter {
                 else {
                     if(request.getRequestURI().contains("/admin") && !user.getRole().contains(Roles.ADMIN.toString()))
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    request.setAttribute("userId", user.getId());
                 }
             }
 

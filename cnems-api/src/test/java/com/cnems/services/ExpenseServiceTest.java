@@ -115,4 +115,12 @@ public class ExpenseServiceTest {
         CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 25, new Date(), ""));
         assertEquals(cnemsException.getStatus(), 404);
     }
+
+    @Test
+    @DisplayName("Test Get Expenses by userId")
+    public void testGetExpensesByUserId() {
+        when(expenseRepository.findByUserId(any(),any())).thenReturn(Page.empty());
+
+        assertDoesNotThrow(() -> expenseService.getByUserId(0L, 0));
+    }
 }
