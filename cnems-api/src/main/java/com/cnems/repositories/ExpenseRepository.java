@@ -11,5 +11,5 @@ import java.util.List;
 public interface ExpenseRepository  extends JpaRepository<Expense, Long> {
     Page<Expense> findByCategoryId(Long categoryId, Pageable pageable);
     List<Expense> findByCategoryId(Long categoryId);
-    List<Expense> findByUserId(Long userId);
+    Page<Expense> findByUserId(Long userId, Pageable pageable);
 }

@@ -46,6 +46,11 @@ public class ExpenseService {
         return expenseRepository.findByCategoryId(categoryId, pageable).toList();
     }
 
+    public  List<Expense> getByUserId(Long userId, int page) throws CnemsException {
+        Pageable pageable = PageRequest.of(page, 5);
+        return expenseRepository.findByUserId(userId, pageable).toList();
+    }
+
     public void addExpense(Long userId, Long categoryId, float amount, Date date, String description) throws CnemsException {
 
         if(amount == 0) throw new CnemsException(400, "Amount can't be zero");

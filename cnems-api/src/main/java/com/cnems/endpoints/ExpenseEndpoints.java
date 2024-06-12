@@ -36,6 +36,15 @@ public class ExpenseEndpoints {
         }
     }
 
+    @GetMapping("/user/{page}")
+    ResponseEntity<List<Expense>> getExpensesByUserId(@RequestAttribute("userId") Long userId, @PathVariable("page") int page) {
+        try {
+            return ResponseEntity.ok(expenseService.getByUserId(userId, page));
+        } catch(Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     @PostMapping("/")
     ResponseEntity<SuccessMessage> addExpense(@RequestParam("userId") Long userId,
                                               @RequestParam("categoryId") Long categoryId,
