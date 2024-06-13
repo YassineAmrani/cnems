@@ -120,7 +120,7 @@ public class ExpenseCategoryServiceTest {
     @DisplayName("Test Delete Category")
     public void testDeleteCategory() {
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
-        when(expenseRepository.findByCategoryId(any())).thenReturn(EMPTY_LIST);
+        when(expenseRepository.findByCategoryIdOrderByDateDesc(any())).thenReturn(EMPTY_LIST);
 
         doNothing().when(expenseCategoryRepository).delete(any());
 
@@ -141,7 +141,7 @@ public class ExpenseCategoryServiceTest {
     @DisplayName("Test Delete Category is related")
     public void testDeleteCategoryIsRelated() {
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
-        when(expenseRepository.findByCategoryId(any())).thenReturn(ExpenseMock.getExpenseListMock());
+        when(expenseRepository.findByCategoryIdOrderByDateDesc(any())).thenReturn(ExpenseMock.getExpenseListMock());
 
         CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseCategoryService.deleteCategory(0L));
 

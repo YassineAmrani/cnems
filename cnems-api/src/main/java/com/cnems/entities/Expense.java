@@ -1,6 +1,7 @@
 package com.cnems.entities;
 
 import jakarta.persistence.*;
+import org.springframework.lang.NonNull;
 
 import java.util.Date;
 
@@ -24,13 +25,16 @@ public class Expense {
     @Column(name = "date")
     Date date;
 
+    @Column(name = "account_id")
+    Long accountId;
+
     @Column(name = "description")
     String description;
 
     @Column(name = "created_at")
     Date createdAt;
 
-    public Expense(Long id, Long userId, Long categoryId, float amount, Date date, String description, Date createdAt) {
+    public Expense(Long id, Long userId, Long categoryId, float amount, Date date, String description, Date createdAt, Long accountId) {
         setId(id);
         setUserId(userId);
         setCategoryId(categoryId);
@@ -38,15 +42,17 @@ public class Expense {
         setDate(date);
         setDescription(description);
         setCreatedAt(createdAt);
+        setAccountId(accountId);
     }
 
-    public Expense(Long userId, Long categoryId, float amount, Date date, String description, Date createdAt) {
+    public Expense(Long userId, Long categoryId, float amount, Date date, String description, Date createdAt, Long accountId) {
         setUserId(userId);
         setCategoryId(categoryId);
         setAmount(amount);
         setDate(date);
         setDescription(description);
         setCreatedAt(createdAt);
+        setAccountId(accountId);
     }
 
     public Expense() {}
@@ -105,5 +111,13 @@ public class Expense {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }

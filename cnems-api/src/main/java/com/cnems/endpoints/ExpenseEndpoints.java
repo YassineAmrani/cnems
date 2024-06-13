@@ -45,16 +45,26 @@ public class ExpenseEndpoints {
         }
     }
 
+    @GetMapping("/account/{accountId}/{page}")
+    ResponseEntity<List<Expense>> getExpensesByAccountId(@PathVariable("accountId") Long accountId, @PathVariable("page") int page) {
+        try {
+            return ResponseEntity.ok(expenseService.getByAccountId(accountId, page));
+        } catch(Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     @PostMapping("/")
-    ResponseEntity<SuccessMessage> addExpense(@RequestParam("userId") Long userId,
+    ResponseEntity<SuccessMessage> addExpense(@RequestAttribute("userId") Long userId,
                                               @RequestParam("categoryId") Long categoryId,
                                               @RequestParam("amount") float amount,
                                               @RequestParam("date") Date date,
-                                              @RequestParam("description") String description) {
+                                              @RequestParam("description") String description,
+                                              @RequestParam("accountId") Long accountId) {
         try {
-            if(userId==null || categoryId == null || date == null || description == null)
+            if(userId==null || categoryId == null || date == null || description == null || accountId == null)
                 return ResponseEntity.badRequest().body(new SuccessMessage(false, "Required fields are missing"));
-            expenseService.addExpense(userId, categoryId, amount, date, description);
+            expenseService.addExpense(userId, categoryId, amount, date, description, accountId);
             return ResponseEntity.ok(new SuccessMessage(true, "Expense added successfully"));
         } catch (CnemsException e) {
             return ResponseEntity.status(e.getStatus()).body(new SuccessMessage(false, e.getMessage()));
@@ -66,11 +76,12 @@ public class ExpenseEndpoints {
                                                  @RequestParam("categoryId") Long categoryId,
                                                  @RequestParam("amount") float amount,
                                                  @RequestParam("date") Date date,
-                                                 @RequestParam("description") String description) {
+                                                 @RequestParam("description") String description,
+                                                 @RequestParam("accountId") Long accountId) {
         try {
             if(id==null || categoryId == null || date == null || description == null)
                 return ResponseEntity.badRequest().body(new SuccessMessage(false, "Required fields are missing"));
-            expenseService.updateExpense(id, categoryId, amount, date, description);
+            expenseService.updateExpense(id, categoryId, amount, date, description, accountId);
             return ResponseEntity.ok(new SuccessMessage(true, "Expense updated successfully"));
         } catch (CnemsException e) {
             return ResponseEntity.status(e.getStatus()).body(new SuccessMessage(false, e.getMessage()));

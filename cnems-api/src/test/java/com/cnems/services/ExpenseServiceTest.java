@@ -1,10 +1,11 @@
 package com.cnems.services;
 
-import com.cnems.entities.ExpenseCategory;
 import com.cnems.exceptions.CnemsException;
+import com.cnems.mocks.AccountMock;
 import com.cnems.mocks.ExpenseCategoryMock;
 import com.cnems.mocks.ExpenseMock;
 import com.cnems.mocks.UserMocks;
+import com.cnems.repositories.AccountRepository;
 import com.cnems.repositories.ExpenseCategoryRepository;
 import com.cnems.repositories.ExpenseRepository;
 import com.cnems.repositories.UserRepository;
@@ -36,6 +37,9 @@ public class ExpenseServiceTest {
     ExpenseRepository expenseRepository;
 
     @Mock
+    AccountRepository accountRepository;
+
+    @Mock
     ExpenseCategoryRepository expenseCategoryRepository;
 
     @Mock
@@ -63,7 +67,7 @@ public class ExpenseServiceTest {
     @DisplayName("Test Get Expense By Category")
     public void testGetExpenseByCategory() {
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
-        when(expenseRepository.findByCategoryId(any(), any())).thenReturn(Page.empty());
+        when(expenseRepository.findByCategoryIdOrderByDateDesc(any(), any())).thenReturn(Page.empty());
 
         assertDoesNotThrow(() -> expenseService.getByCategory(0L, 0));
     }
@@ -72,7 +76,7 @@ public class ExpenseServiceTest {
     @DisplayName("Test Get Expense By Category Not Found")
     public void testGetExpenseByCategoryNotFound() {
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.empty());
-        when(expenseRepository.findByCategoryId(any())).thenReturn(ExpenseMock.getExpenseListMock());
+        when(expenseRepository.findByCategoryIdOrderByDateDesc(any())).thenReturn(ExpenseMock.getExpenseListMock());
 
         CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.getByCategory(0L, 0));
         assertEquals(cnemsException.getStatus(), 404);
@@ -81,19 +85,19 @@ public class ExpenseServiceTest {
     @Test
     @DisplayName("Test Add Expense")
     public void testAddExpense() {
-        when(userRepository.findById(any())).thenReturn(Optional.of(UserMocks.getMockedUser()));
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
+        when(accountRepository.findById(any())).thenReturn(Optional.of(AccountMock.getAccountMock()));
 
         when(expenseRepository.save(any())).thenReturn(ExpenseMock.getExpenseMock());
 
-        assertDoesNotThrow(() -> expenseService.addExpense(0L, 0L, 25, new Date(), ""));
+        assertDoesNotThrow(() -> expenseService.addExpense(0L, 0L, 25, new Date(), "", 0L));
     }
 
     @Test
     @DisplayName("Test Add Expense amount equals zero")
     public void testAddExpenseAmountEquals() {
 
-        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 0, new Date(), ""));
+        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 0, new Date(), "", 0L));
         assertEquals(cnemsException.getStatus(), 400);
     }
 
@@ -101,25 +105,25 @@ public class ExpenseServiceTest {
     @DisplayName("Test Add Expense Date After Today")
     public void testAddExpenseDateAfterNow() {
 
-        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 25, new Date(2024, 6,10), ""));
+        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 25, new Date(2024, 6,10), "", 0L));
         assertEquals(cnemsException.getStatus(), 400);
     }
 
     @Test
-    @DisplayName("Test Add Expense user not found")
-    public void testAddCategoryUserNotFound() {
+    @DisplayName("Test Add Expense account not found")
+    public void testAddExpenseAccountNotFound() {
 
-        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        when(accountRepository.findById(any())).thenReturn(Optional.empty());
         when(expenseCategoryRepository.findById(any())).thenReturn(Optional.of(ExpenseCategoryMock.getCategoryMock()));
 
-        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 25, new Date(), ""));
+        CnemsException cnemsException = assertThrows(CnemsException.class, () -> expenseService.addExpense(0L, 0L, 25, new Date(), "", 0L));
         assertEquals(cnemsException.getStatus(), 404);
     }
 
     @Test
     @DisplayName("Test Get Expenses by userId")
     public void testGetExpensesByUserId() {
-        when(expenseRepository.findByUserId(any(),any())).thenReturn(Page.empty());
+        when(expenseRepository.findByUserIdOrderByDateDesc(any(),any())).thenReturn(Page.empty());
 
         assertDoesNotThrow(() -> expenseService.getByUserId(0L, 0));
     }
