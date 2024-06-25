@@ -67,7 +67,7 @@ public class ExpenseCategoryService {
         Optional<ExpenseCategory> category = expenseCategoryRepository.findById(id);
         if(category.isEmpty()) throw new CnemsException(404, "Category Not Found");
 
-        boolean isRelated = expenseRepository.findByCategoryId(id).isEmpty();
+        boolean isRelated = expenseRepository.findByCategoryIdOrderByDateDesc(id).isEmpty();
 
         if(!isRelated) throw new CnemsException(400, "Category is linked to Expenses");
 

@@ -9,7 +9,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ExpenseRepository  extends JpaRepository<Expense, Long> {
-    Page<Expense> findByCategoryId(Long categoryId, Pageable pageable);
-    List<Expense> findByCategoryId(Long categoryId);
-    Page<Expense> findByUserId(Long userId, Pageable pageable);
+    Page<Expense> findByCategoryIdOrderByDateDesc(Long categoryId, Pageable pageable);
+    List<Expense> findByCategoryIdOrderByDateDesc(Long categoryId);
+    Page<Expense> findByUserIdOrderByDateDesc(Long userId, Pageable pageable);
+    List<Expense> findByAccountIdOrderByDateDesc(Long accountId);
+
+    Page<Expense> findByAccountIdOrderByDateDesc(Long accountId, Pageable pageable);
 }

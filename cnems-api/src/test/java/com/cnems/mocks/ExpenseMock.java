@@ -12,5 +12,5 @@ public class ExpenseMock {
         return Collections.singletonList(new Expense());
     }
 
-    public static Expense getExpenseMock() {return new Expense(0L, 0L, 0L, 25f, new Date(), "",new Date());}
+    public static Expense getExpenseMock() {return new Expense(0L, 0L, 0L, 25f, new Date(), "",new Date(), 0L);}
 }
