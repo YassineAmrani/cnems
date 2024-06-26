@@ -41,6 +41,11 @@ public class ExpenseService {
         return expense.get();
     }
 
+    public List<Expense> getExpensesByDateBetween(Long userId, Date startDate, Date endDate, int page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        return expenseRepository.findByUserIdAndDateBetween(userId, startDate, endDate, pageable);
+    }
+
     public List<Expense> getByCategory(Long categoryId, int page) throws CnemsException {
         Optional<ExpenseCategory> category = expenseCategoryRepository.findById(categoryId);
 

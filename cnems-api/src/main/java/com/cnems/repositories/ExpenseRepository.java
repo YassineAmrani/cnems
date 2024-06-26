@@ -18,6 +18,8 @@ public interface ExpenseRepository  extends JpaRepository<Expense, Long> {
     Page<Expense> findByUserIdOrderByDateDesc(Long userId, Pageable pageable);
     List<Expense> findByAccountIdOrderByDateDesc(Long accountId);
 
+    List<Expense> findByUserIdAndDateBetween(Long userId, Date startDate, Date endDate, Pageable pageable);
+
     Page<Expense> findByAccountIdOrderByDateDesc(Long accountId, Pageable pageable);
 
     @Query(value = "SELECT account_id, SUM(amount) as sum_amount FROM public.expenses WHERE user_id = ?1 AND date BETWEEN ?2 AND ?3 GROUP BY account_id",
