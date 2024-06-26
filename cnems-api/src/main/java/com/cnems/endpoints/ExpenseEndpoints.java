@@ -1,9 +1,11 @@
 package com.cnems.endpoints;
 
 import com.cnems.dto.SuccessMessage;
+import com.cnems.dto.UserSummaryDTO;
 import com.cnems.entities.Expense;
 import com.cnems.exceptions.CnemsException;
 import com.cnems.services.ExpenseService;
+import com.cnems.services.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class ExpenseEndpoints {
 
     @Autowired
     ExpenseService expenseService;
+
+    @Autowired
+    SummaryService summaryService;
 
     @GetMapping("/{id}")
     ResponseEntity<Expense> getExpense(@PathVariable("id") Long id) {
@@ -95,6 +100,19 @@ public class ExpenseEndpoints {
             return ResponseEntity.ok(new SuccessMessage(true, "Expense deleted successfully"));
         } catch (CnemsException e) {
             return ResponseEntity.status(e.getStatus()).body(new SuccessMessage(false, e.getMessage()));
+        }
+    }
+
+    @GetMapping("/summary")
+    ResponseEntity<UserSummaryDTO> getUserSummary(@RequestAttribute("userId") Long userId,
+                                                  @RequestParam("start_date") Date startDate,
+                                                  @RequestParam("end_date") Date endDate) {
+        try{
+            UserSummaryDTO userSummary = summaryService.getFullSummaryBetweenDates(userId,startDate,endDate);
+            return ResponseEntity.ok(userSummary);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
