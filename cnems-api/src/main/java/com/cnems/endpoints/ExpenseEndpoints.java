@@ -32,6 +32,18 @@ public class ExpenseEndpoints {
         }
     }
 
+    @GetMapping("/{page}")
+    ResponseEntity<List<Expense>> getExpensesByDateBetween(@RequestAttribute("userId") Long userId,
+                                                           @RequestParam("start_date") Date startDate,
+                                                           @RequestParam("end_date") Date endDate,
+                                                           @PathVariable("page") int page) {
+        try{
+            return ResponseEntity.ok(expenseService.getExpensesByDateBetween(userId, startDate, endDate, page));
+        } catch(Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     @GetMapping("/category/{categoryId}/{page}")
     ResponseEntity<List<Expense>> getExpensesByCategory(@PathVariable("categoryId") Long categoryId, @PathVariable("page") int page) {
         try {

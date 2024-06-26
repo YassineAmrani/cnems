@@ -127,4 +127,12 @@ public class ExpenseServiceTest {
 
         assertDoesNotThrow(() -> expenseService.getByUserId(0L, 0));
     }
+
+    @Test
+    @DisplayName("Test Get Expenses by date range")
+    public void testGetExpensesByDateRange() {
+        when(expenseRepository.findByUserIdAndDateBetween(any(), any(), any(), any())).thenReturn(ExpenseMock.getExpenseListMock());
+
+        assertDoesNotThrow(() -> expenseService.getExpensesByDateBetween(0L, new Date(), new Date(), 0));
+    }
 }
